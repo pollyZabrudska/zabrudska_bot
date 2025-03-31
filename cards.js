@@ -1,5 +1,9 @@
+const functions = require("firebase-functions");
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
+app.use(cors({ origin: true }));
 app.use(express.json());
 
 const images = [
@@ -24,7 +28,7 @@ const images = [
   "https://i.pinimg.com/736x/51/80/7d/51807d0c683be326641792e4eda7affa.jpg",
 ];
 
-app.post("/webhook", (req, res) => {
+app.post("/", (req, res) => {
     const randomImage = images[Math.floor(Math.random() * images.length)];
 
     res.json({
@@ -46,6 +50,4 @@ app.post("/webhook", (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-});
+exports.dialogflowWebhook = functions.https.onRequest(app);
